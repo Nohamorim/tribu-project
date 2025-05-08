@@ -1,0 +1,21 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# Pycache
+__pycache__/
+*.py[cod]
+
+# Banco de dados SQLite
+*.sqlite3
+
+# Configurações do VS Code
+.vscode/
+
+# Arquivos de migração compilados
+*/migrations/*.pyc
+*/migrations/__pycache__/
+
+# Outros
+*.log
+.DS_Store
