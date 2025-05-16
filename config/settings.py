@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'usuarios',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -78,10 +79,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DB_NAME"),          
-        'HOST': os.environ.get("DB_HOST"),  
-        'USER': os.environ.get("DB_USER"), 
-        'PASSWORD': os.environ.get("DB_PASSWORD"), 
+        'NAME': 'cadastro',          # Nome do seu banco que você criou
+        'USER': 'noemy',              # Seu usuário do PostgreSQL
+        'PASSWORD': 'umaSenhaSegura', # Sua senha do usuário noemy
+        'HOST': 'localhost',          # Ou o IP do servidor se for remoto
+        'PORT': '5432',               # Porta padrão do PostgreSQL
     }
 }
 
