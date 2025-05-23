@@ -1,3 +1,4 @@
+from django.contrib.auth import views as auth_views
 from django.contrib import admin
 from django.urls import path, include
 from django.http import HttpResponse
@@ -26,6 +27,7 @@ def home(request):
 
 urlpatterns = [
     path('', home),  # Rota para a raiz /
+    path('accounts/', include('django.contrib.auth.urls')),  # Rota para autenticação
     path('admin/', admin.site.urls),
     path('api/', include('usuarios.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

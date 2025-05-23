@@ -26,52 +26,62 @@ SECRET_KEY = 'django-insecure-t)fe3g1@il4^ber0o1)3px$h4aer*+wz^pq^0_yl9_nsk2$^96
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [] # Lista de hosts permitidos
 
+LOGIN_REDIRECT_URL = 'login' # URL para redirecionamento após login
+LOGOUT_REDIRECT_URL = 'login' # URL para redirecionamento após logout
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Backend para envio de e-mails
+EMAIL_FILE_PATH = BASE_DIR / 'emails'
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS = [ # Aplicativos instalados
     'django.contrib.admin',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.contenttypes', # Aplicativo para tipos de conteúdo
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
     'usuarios',
     'drf_yasg',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware', # Middleware de segurança
+    'django.contrib.sessions.middleware.SessionMiddleware', # Middleware para sessões
+    'django.middleware.common.CommonMiddleware', # Middleware comum
+    'django.middleware.csrf.CsrfViewMiddleware', # Middleware para proteção CSRF
+    'django.contrib.auth.middleware.AuthenticationMiddleware', # Middleware para autenticação
+    'django.contrib.messages.middleware.MessageMiddleware', # Middleware para mensagens
+    'django.middleware.clickjacking.XFrameOptionsMiddleware', # Protege contra ataques de clickjacking
 ]
 
-ROOT_URLCONF = 'config.urls'
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'] # Configuração do Django Filter
+}
 
-TEMPLATES = [
+ROOT_URLCONF = 'config.urls' # URL de configuração do projeto
+
+TEMPLATES = [ # Configurações para templates
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates', # Backend para renderizar templates
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], # Adicione o caminho para os templates
+        'APP_DIRS': True, # Permite que os templates sejam carregados a partir de diretórios de aplicativos
+        'OPTIONS': { # Configurações adicionais para o template
+            'context_processors': [ # Processadores de contexto
+                'django.template.context_processors.debug', # Processa o debug
+                'django.template.context_processors.request', # Processa o request
+                'django.contrib.auth.context_processors.auth', # Processa a autenticação
+                'django.contrib.messages.context_processors.messages', # Processa mensagens
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
