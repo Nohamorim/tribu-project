@@ -1,34 +1,40 @@
-from django.contrib.auth import views as auth_views
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from django.http import HttpResponse
+from rest_framework import routers
+from usuarios import views
 
-# Configurações do Swagger
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-
-# Informações do Swagger
-schema_view = get_schema_view(
-   openapi.Info(
-      title="API Tribu",
-      default_version='v1',
-      description="Controle de cadastro de usuários",
-      terms_of_service="#",
-      contact=openapi.Contact(email="myamorimads2023@gmail.com"),
-      license=openapi.License(name="BSD License"),
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
+# Importações do drf-spectacular
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularSwaggerView,
+    SpectacularRedocView,
 )
 
+
+# Define a view para a página inicial
 def home(request):
     return HttpResponse("Bem-vindo à página inicial!")
 
+
+# Configuração do router do DRF
+router = routers.DefaultRouter()
+router.register("clientes", views.ClienteViewSet, basename="cliente")
+
+# Configuração das URLs do projeto Django
 urlpatterns = [
-    path('', home),  # Rota para a raiz /
-    path('accounts/', include('django.contrib.auth.urls')),  # Rota para autenticação
-    path('admin/', admin.site.urls),
-    path('api/', include('usuarios.urls')),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path("", home, name="home"),  # Melhor mapear a view home na raiz
+    path("Cadastro/", include(router.urls)),  # Inclui as URLs do DRF
+    path("api-auth/", include("rest_framework.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("admin/", admin.site.urls),
+    # Schema da API em JSON
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    # Documentação Swagger UI
+    path(
+        "swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"
+    ),
+    # Documentação Redoc (opcional)
+    path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]

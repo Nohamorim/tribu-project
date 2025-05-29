@@ -6,7 +6,7 @@ try:
         user="noemy",
         password="umaSenhaSegura",  # troque pela sua senha real
         host="localhost",
-        port="5432"
+        port="5432",
     )
     print("✅ Conexão com o banco estabelecida com sucesso!")
     conn.close()

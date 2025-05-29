@@ -21,79 +21,102 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-t)fe3g1@il4^ber0o1)3px$h4aer*+wz^pq^0_yl9_nsk2$^96'
+SECRET_KEY = "django-insecure-t)fe3g1@il4^ber0o1)3px$h4aer*+wz^pq^0_yl9_nsk2$^96"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [] # Lista de hosts permitidos
+ALLOWED_HOSTS = []  # Lista de hosts permitidos
 
-LOGIN_REDIRECT_URL = 'login' # URL para redirecionamento após login
-LOGOUT_REDIRECT_URL = 'login' # URL para redirecionamento após logout
+LOGIN_REDIRECT_URL = "login"  # URL para redirecionamento após login
+LOGOUT_REDIRECT_URL = "login"  # URL para redirecionamento após logout
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Backend para envio de e-mails
-EMAIL_FILE_PATH = BASE_DIR / 'emails'
+EMAIL_BACKEND = (
+    "django.core.mail.backends.console.EmailBackend"  # Backend para envio de e-mails
+)
+EMAIL_FILE_PATH = BASE_DIR / "emails"
 
 # Application definition
 
-INSTALLED_APPS = [ # Aplicativos instalados
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes', # Aplicativo para tipos de conteúdo
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'usuarios',
-    'drf_yasg',
-    'django_filters',
+INSTALLED_APPS = [  # Aplicativos instalados
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",  # Aplicativo para tipos de conteúdo
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "rest_framework",
+    "usuarios",
+    "drf_spectacular",
+    "drf_spectacular_sidecar",  # necessário para descoberta de collectstatic do Django
+    "django_filters",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware', # Middleware de segurança
-    'django.contrib.sessions.middleware.SessionMiddleware', # Middleware para sessões
-    'django.middleware.common.CommonMiddleware', # Middleware comum
-    'django.middleware.csrf.CsrfViewMiddleware', # Middleware para proteção CSRF
-    'django.contrib.auth.middleware.AuthenticationMiddleware', # Middleware para autenticação
-    'django.contrib.messages.middleware.MessageMiddleware', # Middleware para mensagens
-    'django.middleware.clickjacking.XFrameOptionsMiddleware', # Protege contra ataques de clickjacking
+    "django.middleware.security.SecurityMiddleware",  # Middleware de segurança
+    "django.contrib.sessions.middleware.SessionMiddleware",  # Middleware para sessões
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.common.CommonMiddleware",  # Middleware comum
+    "django.middleware.csrf.CsrfViewMiddleware",  # Middleware para proteção CSRF
+    "django.contrib.auth.middleware.AuthenticationMiddleware",  # Middleware para autenticação
+    "django.contrib.messages.middleware.MessageMiddleware",  # Middleware para mensagens
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",  # Protege contra ataques de clickjacking
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'] # Configuração do Django Filter
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ],  # Configuração do Django Filter
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
-ROOT_URLCONF = 'config.urls' # URL de configuração do projeto
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API Tribu",
+    "DESCRIPTION": "API para gerenciar clientes e usuários",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SWAGGER_UI_DIST": "SIDECAR",  # abreviação para usar o sidecar em vez disso
+    "SWAGGER_UI_FAVICON_HREF": "SIDECAR",
+    "REDOC_DIST": "SIDECAR",
+    # OUTRAS CONFIGURAÇÕES
+}
 
-TEMPLATES = [ # Configurações para templates
+ROOT_URLCONF = "config.urls"  # URL de configuração do projeto
+
+TEMPLATES = [  # Configurações para templates
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates', # Backend para renderizar templates
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], # Adicione o caminho para os templates
-        'APP_DIRS': True, # Permite que os templates sejam carregados a partir de diretórios de aplicativos
-        'OPTIONS': { # Configurações adicionais para o template
-            'context_processors': [ # Processadores de contexto
-                'django.template.context_processors.debug', # Processa o debug
-                'django.template.context_processors.request', # Processa o request
-                'django.contrib.auth.context_processors.auth', # Processa a autenticação
-                'django.contrib.messages.context_processors.messages', # Processa mensagens
+        "BACKEND": "django.template.backends.django.DjangoTemplates",  # Backend para renderizar templates
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates")
+        ],  # Adicione o caminho para os templates
+        "APP_DIRS": True,  # Permite que os templates sejam carregados a partir de diretórios de aplicativos
+        "OPTIONS": {  # Configurações adicionais para o template
+            "context_processors": [  # Processadores de contexto
+                "django.template.context_processors.debug",  # Processa o debug
+                "django.template.context_processors.request",  # Processa o request
+                "django.contrib.auth.context_processors.auth",  # Processa a autenticação
+                "django.contrib.messages.context_processors.messages",  # Processa mensagens
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cadastro',          # Nome do seu banco que você criou
-        'USER': 'noemy',              # Seu usuário do PostgreSQL
-        'PASSWORD': 'umaSenhaSegura', # Sua senha do usuário noemy
-        'HOST': 'localhost',          # Ou o IP do servidor se for remoto
-        'PORT': '5432',               # Porta padrão do PostgreSQL
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "cadastro",  # Nome do seu banco que você criou
+        "USER": "noemy",  # Seu usuário do PostgreSQL
+        "PASSWORD": "umaSenhaSegura",  # Sua senha do usuário noemy
+        "HOST": "localhost",  # Ou o IP do servidor se for remoto
+        "PORT": "5432",  # Porta padrão do PostgreSQL
     }
 }
 
@@ -103,16 +126,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -120,9 +143,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -132,9 +155,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080",
+]
